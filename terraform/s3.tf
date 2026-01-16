@@ -8,14 +8,14 @@ resource "aws_s3_bucket" "bootstrap_bucket" {
 }
 
 # TODO: use SSM 
-resource "aws_s3_object" "pkey" {
-  bucket = aws_s3_bucket.bootstrap_bucket.id
-  key    = "pkey.pem"
-  source = "${path.module}/../ansible/pkey.pem"
-  etag   = filemd5("${path.module}/../ansible/pkey.pem")
+# resource "aws_s3_object" "pkey" {
+#   bucket = aws_s3_bucket.bootstrap_bucket.id
+#   key    = "pkey.pem"
+#   source = "${path.module}/../ansible/pkey.pem"
+#   etag   = filemd5("${path.module}/../ansible/pkey.pem")
 
-  depends_on = [local_file.ansible_private_key]
-}
+#   depends_on = [aws_nat_gateway.nat]
+# }
 
 resource "aws_s3_object" "inventory_ini" {
   bucket = aws_s3_bucket.bootstrap_bucket.id
@@ -34,3 +34,24 @@ resource "aws_s3_object" "ansible_cfg" {
 
   depends_on = [local_file.ansible_private_key]
 }
+
+resource "aws_s3_object" "docker_yml" {
+  bucket = aws_s3_bucket.bootstrap_bucket.id
+  key    = "docker.yml"
+  source = "${path.module}/../ansible/docker.yml"
+  etag   = filemd5("${path.module}/../ansible/docker.yml")
+
+  depends_on = [local_file.ansible_private_key]
+}
+
+resource "aws_s3_object" "webserver_yml" {
+  bucket = aws_s3_bucket.bootstrap_bucket.id
+  key    = "webserver.yml"
+  source = "${path.module}/../ansible/webserver.yml"
+  etag   = filemd5("${path.module}/../ansible/webserver.yml")
+
+  depends_on = [local_file.ansible_private_key]
+}
+
+
+

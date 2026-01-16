@@ -9,7 +9,7 @@ resource "aws_key_pair" "ansible" {
 }
 
 resource "local_file" "ansible_private_key" {
-  filename        = "${path.module}/../ansible/pkey.pem"
+  filename        = "${path.module}/pkey.pem"
   content         = tls_private_key.ansible.private_key_pem
   file_permission = "0600"
 }

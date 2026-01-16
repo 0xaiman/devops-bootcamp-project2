@@ -45,25 +45,25 @@ runcmd:
   - /tmp/aws/install > /home/ssm-user/logs/awscli-install.log 2>&1
 
   # pull .pem from s3
-  - aws s3 cp s3://bucket-bootstrapping-devops-2/pkey.pem /home/ssm-user/.ssh/pkey.pem > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/pkey.pem /home/ssm-user/.ssh/pkey.pem >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
   - chown ssm-user:ssm-user /home/ssm-user/.ssh/pkey.pem
   - chmod 600 /home/ssm-user/.ssh/pkey.pem
 
     # pull .cfg from s3
-  - aws s3 cp s3://bucket-bootstrapping-devops-2/ansible.cfg /home/ssm-user/ansible/ansible.cfg > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/ansible.cfg /home/ssm-user/ansible/ansible.cfg >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
   - chown ssm-user:ssm-user /home/ssm-user/ansible/ansible.cfg
   - chmod 644 /home/ssm-user/ansible/ansible.cfg
 
      # pull .ini from s3
-  - aws s3 cp s3://bucket-bootstrapping-devops-2/inventory.ini /home/ssm-user/ansible/inventory.ini > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/inventory.ini /home/ssm-user/ansible/inventory.ini >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
   - chown ssm-user:ssm-user /home/ssm-user/ansible/inventory.ini
   - chmod 644 /home/ssm-user/ansible/inventory.ini
 
-  - aws s3 cp s3://bucket-bootstrapping-devops-2/docker.yml /home/ssm-user/ansible/docker.yml > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/docker.yml /home/ssm-user/ansible/docker.yml >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
   - chown ssm-user:ssm-user /home/ssm-user/ansible/docker.yml
   - chmod 644 /home/ssm-user/ansible/docker.yml
 
-  - aws s3 cp s3://bucket-bootstrapping-devops-2/webserver.yml /home/ssm-user/ansible/webserver.yml > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/webserver.yml /home/ssm-user/ansible/webserver.yml >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
   - chown ssm-user:ssm-user /home/ssm-user/ansible/webserver.yml
   - chmod 644 /home/ssm-user/ansible/webserver.yml
 
