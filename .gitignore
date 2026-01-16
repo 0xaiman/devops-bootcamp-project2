@@ -1,0 +1,74 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+!example.tfvars
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ansible
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+*.retry
+venv/
+env/
+.venv
+.env
+.ansible/roles/
+.ansible/tmp/
+*.vault
+!vault.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+.classpath
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.bak
+tmp/
+temp/
+
+# SSH Keys and Secrets
+ansible/*.pem
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+known_hosts
+
+# Sensitive files
+secrets/
+!secrets/.gitkeep
