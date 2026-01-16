@@ -44,10 +44,20 @@ runcmd:
   - unzip /tmp/awscliv2.zip -d /tmp
   - /tmp/aws/install > /home/ssm-user/logs/awscli-install.log 2>&1
 
-  # pull from s3
+  # pull .pem from s3
   - aws s3 cp s3://bucket-bootstrapping-devops-2/pkey.pem /home/ssm-user/.ssh/pkey.pem > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
   - chown ssm-user:ssm-user /home/ssm-user/.ssh/pkey.pem
   - chmod 600 /home/ssm-user/.ssh/pkey.pem
+
+    # pull .cfg from s3
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/ansible.cfg /home/ssm-user/ansible/ansible.cfg > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/ansible/ansible.cfg
+  - chmod 644 /home/ssm-user/ansible/ansible.cfg
+
+     # pull .ini from s3
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/inventory.ini /home/ssm-user/ansible/inventory.ini > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/ansible/inventory.ini
+  - chmod 644 /home/ssm-user/ansible/inventory.ini
 
 
 
