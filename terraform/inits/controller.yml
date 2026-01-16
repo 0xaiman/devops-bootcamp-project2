@@ -59,6 +59,24 @@ runcmd:
   - chown ssm-user:ssm-user /home/ssm-user/ansible/inventory.ini
   - chmod 644 /home/ssm-user/ansible/inventory.ini
 
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/docker.yml /home/ssm-user/ansible/docker.yml > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/ansible/docker.yml
+  - chmod 644 /home/ssm-user/ansible/docker.yml
+
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/webserver.yml /home/ssm-user/ansible/webserver.yml > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/ansible/webserver.yml
+  - chmod 644 /home/ssm-user/ansible/webserver.yml
+
+  # Wait for network + SSH readiness
+  - sleep 30
+
+  # Run playbook explicitly with inventory
+  - sudo -u ssm-user ansible-playbook -i /home/ssm-user/ansible/inventory.ini /home/ssm-user/ansible/docker.yml 
+  - sudo -u ssm-user ansible-playbook -i /home/ssm-user/ansible/inventory.ini /home/ssm-user/ansible/webserver.yml 
+
+
+
+
 
 
 

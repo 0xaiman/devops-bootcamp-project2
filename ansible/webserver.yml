@@ -1,0 +1,30 @@
+---
+- name: Clone lab-final-project repository on web server
+  hosts: web
+  become: true
+
+  vars:
+    repo_url: https://github.com/Infratify/lab-final-project.git
+    app_dir: /opt/lab-final-project
+
+  tasks:
+    - name: Ensure git is installed
+      apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Create application directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Clone repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: main
+        force: yes
