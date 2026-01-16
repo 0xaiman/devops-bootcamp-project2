@@ -37,16 +37,7 @@ runcmd:
   - apt update > /home/ssm-user/logs/apt-update.log 2>&1
   - apt upgrade -y > /home/ssm-user/logs/apt-upgrade.log 2>&1
 
-  #   # -----------------------------
-  # # Install pipx and Ansible for ssm-user
-  # # -----------------------------
-  # - apt install -y pipx > /home/ssm-user/logs/pipx-ansible-install.log 2>&1
-  # - pipx ensurepath >> /home/ssm-user/logs/pipx-ansible-install.log 2>&1
-  # - sudo -u ssm-user -i pipx ensurepath >> /home/ssm-user/logs/pipx-ansible-install.log 2>&1
-  # - sudo -u ssm-user -i pipx install --include-deps ansible >> /home/ssm-user/logs/pipx-ansible-install.log 2>&1
-  # # Add pipx bin dir to ssm-user PATH in .bashrc
-  # - echo 'export PATH="$HOME/.local/bin:$PATH"' >> /home/ssm-user/.profile
-  # - chown ssm-user:ssm-user /home/ssm-user/.bashrc
+ 
 
 # install awscli
   - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
@@ -56,7 +47,7 @@ runcmd:
   # pull from s3
   - aws s3 cp s3://bucket-bootstrapping-devops-2/pkey.pem /home/ssm-user/.ssh/pkey.pem > /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
   - chown ssm-user:ssm-user /home/ssm-user/.ssh/pkey.pem
-  - chmod 644 /home/ssm-user/.ssh/pkey.pem
+  - chmod 600 /home/ssm-user/.ssh/pkey.pem
 
 
 
