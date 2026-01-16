@@ -7,6 +7,7 @@ resource "aws_s3_bucket" "bootstrap_bucket" {
   }
 }
 
+# TODO: use SSM 
 resource "aws_s3_object" "pkey" {
   bucket = aws_s3_bucket.bootstrap_bucket.id
   key    = "pkey.pem"
