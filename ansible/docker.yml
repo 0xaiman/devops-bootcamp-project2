@@ -3,43 +3,39 @@
   hosts: all
   become: true
 
-  vars:
-    docker_gpg_key: /usr/share/keyrings/docker-archive-keyring.gpg
-    docker_repo: >
-      deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]
-      https://download.docker.com/linux/ubuntu
-      {{ ansible_distribution_release }} stable
-
   tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
-        cache_valid_time: 3600
 
-    - name: Install prerequisite packages
+    - name: Install required packages
       apt:
         name:
-          - apt-transport-https
           - ca-certificates
           - curl
-          - software-properties-common
+          - gnupg
+          - lsb-release
         state: present
 
-    - name: Create directory for Docker GPG key
+    - name: Create keyrings directory
       file:
-        path: /usr/share/keyrings
+        path: /etc/apt/keyrings
         state: directory
-        mode: '0755'
+        mode: "0755"
 
-    - name: Download Docker GPG key
-      get_url:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        dest: "{{ docker_gpg_key }}"
-        mode: '0644'
+    - name: Download and dearmor Docker GPG key
+      shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      args:
+        creates: /etc/apt/keyrings/docker.gpg
+
+    - name: Set permissions for Docker GPG key
+      file:
+        path: /etc/apt/keyrings/docker.gpg
+        mode: "0644"
 
     - name: Add Docker apt repository
       apt_repository:
-        repo: "{{ docker_repo }}"
+        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable"
         state: present
         filename: docker
 
@@ -56,9 +52,3 @@
           - docker-buildx-plugin
           - docker-compose-plugin
         state: present
-
-    - name: Ensure Docker service is enabled and running
-      service:
-        name: docker
-        state: started
-        enabled: true
