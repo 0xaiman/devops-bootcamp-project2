@@ -1,0 +1,44 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - git
+  - curl
+  - unzip
+  - software-properties-common
+  - ca-certificates
+  - gnupg
+  - lsb-release
+
+runcmd:
+  # -----------------------------
+  # Create log directory for ssm-user
+  # -----------------------------
+  - mkdir -p /home/ssm-user/logs
+  - chown ssm-user:ssm-user /home/ssm-user/logs
+
+  # -----------------------------
+  # Create user directories
+  # -----------------------------
+  # ensure ssm-user exists (some images don't create it until SSM session)
+  - id -u ssm-user >/dev/null 2>&1 || useradd -m -s /bin/bash ssm-user
+  - mkdir -p /home/ssm-user/.ssh /home/ssm-user/ansible
+  - chown -R ssm-user:ssm-user /home/ssm-user
+  - chmod 700 /home/ssm-user/.ssh
+
+  # -----------------------------
+  # System updates with logging
+  # -----------------------------
+  - apt update > /home/ssm-user/logs/apt-update.log 2>&1
+  - apt upgrade -y > /home/ssm-user/logs/apt-upgrade.log 2>&1
+
+# install awscli
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+  - unzip /tmp/awscliv2.zip -d /tmp
+  - /tmp/aws/install > /home/ssm-user/logs/awscli-install.log 2>&1
+
+  # pull from s3
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/pkey.pem /home/ssm-user/.ssh/pkey.pem > /home/ssm-user/logs/aws-s3-ansiblecfg.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/.ssh/pkey.pem
+  - chmod 644 /home/ssm-user/.ssh/pkey.pem

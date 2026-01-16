@@ -6,6 +6,7 @@ resource "aws_instance" "web" {
   private_ip                  = "10.0.0.5"
   iam_instance_profile        = aws_iam_instance_profile.ssm.name
   associate_public_ip_address = true
+  key_name                    = aws_key_pair.ansible.key_name
 
   tags = {
     Name = "devops-web-server"
@@ -32,8 +33,12 @@ resource "aws_instance" "controller" {
   vpc_security_group_ids = [aws_security_group.private.id]
   private_ip             = "10.0.0.135"
   iam_instance_profile   = aws_iam_instance_profile.ssm.name
+  key_name               = aws_key_pair.ansible.key_name
 
-  depends_on = [aws_nat_gateway.nat]
+  user_data = templatefile("${path.module}/inits/controller.yml", {})
+
+
+  depends_on = [aws_nat_gateway.nat, aws_iam_role_policy_attachment.ssm]
 
   tags = {
     Name = "devops-private-server"
