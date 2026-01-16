@@ -1,5 +1,5 @@
 resource "aws_instance" "web" {
-  ami                         = "ami-00d8fc944fb171e29"
+  ami                         = "ami-0827b3068f1548bf6"
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.public.id]
@@ -27,7 +27,7 @@ resource "aws_eip" "web_eip" {
 }
 
 resource "aws_instance" "controller" {
-  ami                    = "ami-00d8fc944fb171e29"
+  ami                    = "ami-0827b3068f1548bf6"
   instance_type          = "t3.micro"
   subnet_id              = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.private.id]
