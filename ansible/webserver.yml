@@ -1,5 +1,5 @@
 ---
-- name: Clone lab-final-project repository on web server
+- name: Clone and run lab-final-project on web server
   hosts: web
   become: true
 
@@ -20,7 +20,7 @@
         state: directory
         owner: ubuntu
         group: ubuntu
-        mode: '0755'
+        mode: "0755"
 
     - name: Clone repository
       git:
@@ -28,3 +28,27 @@
         dest: "{{ app_dir }}"
         version: main
         force: yes
+
+    - name: Ensure docker group exists
+      group:
+        name: docker
+        state: present
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Refresh group membership for ubuntu (newgrp workaround)
+      shell: newgrp docker <<EOF
+        whoami
+        EOF
+      become_user: ubuntu
+      ignore_errors: yes
+
+    - name: Build and run with Docker Compose
+      shell: docker compose up -d --build
+      args:
+        chdir: "{{ app_dir }}"
+      # Run as root to ensure Docker socket access
