@@ -1,0 +1,6 @@
+---
+- name: Install Node Exporter via Ansible Galaxy role
+  hosts: web
+  become: true
+  roles:
+    - prometheus.prometheus.node_exporter

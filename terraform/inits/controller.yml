@@ -1,30 +1,6 @@
 #cloud-config
-
 package_update: true
 package_upgrade: true
-
-write_files:
-  - path: /etc/systemd/system/bootstrap-ansible.service
-    permissions: '0644'
-    owner: root:root
-    content: |
-      [Unit]
-      Description=Run Ansible bootstrap
-      After=network-online.target amazon-ssm-agent.service
-      Wants=network-online.target
-
-      [Service]
-      Type=oneshot
-      User=ssm-user
-      Environment=HOME=/home/ssm-user
-      WorkingDirectory=/home/ssm-user/ansible
-      ExecStart=/usr/bin/ansible-playbook -i inventory.ini docker.yml
-      ExecStart=/usr/bin/ansible-playbook -i inventory.ini webserver.yml
-      StandardOutput=append:/home/ssm-user/logs/ansible.log
-      StandardError=append:/home/ssm-user/logs/ansible.log
-
-      [Install]
-      WantedBy=multi-user.target
 
 packages:
   - git
@@ -91,12 +67,34 @@ runcmd:
   - chown ssm-user:ssm-user /home/ssm-user/ansible/webserver.yml
   - chmod 644 /home/ssm-user/ansible/webserver.yml
 
-  # Wait for network + SSH readiness
-  - sleep 30
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/monitoring.yml /home/ssm-user/ansible/monitoring.yml >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/ansible/monitoring.yml
+  - chmod 644 /home/ssm-user/ansible/monitoring.yml
 
-  # Reload systemd, enable and start ansible bootstrap service
-  - systemctl daemon-reload
-  - systemctl enable --now bootstrap-ansible.service
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/node_exporter.yml /home/ssm-user/ansible/node_exporter.yml >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/ansible/node_exporter.yml
+  - chmod 644 /home/ssm-user/ansible/node_exporter.yml
+
+
+  - aws s3 cp s3://bucket-bootstrapping-devops-2/run-all.yml /home/ssm-user/ansible/run-all.yml >> /home/ssm-user/logs/aws-s3-files.log 2>&1 || true
+  - chown ssm-user:ssm-user /home/ssm-user/ansible/run-all.yml
+  - chmod 644 /home/ssm-user/ansible/run-all.yml
+
+  # Install Ansible Galaxy collections needed by playbooks
+  - mkdir -p /home/ssm-user/.ansible/collections/ansible_collections
+  - chown -R ssm-user:ssm-user /home/ssm-user/.ansible
+  - sudo -u ssm-user ansible-galaxy collection install prometheus.prometheus --force >> /home/ssm-user/logs/ansible-galaxy.log 2>&1 || true
+  - chown -R ssm-user:ssm-user /home/ssm-user/.ansible
+
+
+  
+
+  # # Wait for network + SSH readiness
+  # - sleep 30
+
+  # # Run playbook explicitly with inventory
+  # - sudo -u ssm-user ansible-playbook -i /home/ssm-user/ansible/inventory.ini /home/ssm-user/ansible/docker.yml 
+  # - sudo -u ssm-user ansible-playbook -i /home/ssm-user/ansible/inventory.ini /home/ssm-user/ansible/webserver.yml 
 
 
 

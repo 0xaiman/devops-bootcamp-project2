@@ -53,5 +53,32 @@ resource "aws_s3_object" "webserver_yml" {
   depends_on = [local_file.ansible_private_key]
 }
 
+resource "aws_s3_object" "monitoring_yml" {
+  bucket = aws_s3_bucket.bootstrap_bucket.id
+  key    = "monitoring.yml"
+  source = "${path.module}/../ansible/monitoring.yml"
+  etag   = filemd5("${path.module}/../ansible/monitoring.yml")
+
+  depends_on = [local_file.ansible_private_key]
+}
+
+resource "aws_s3_object" "node_exporter_yml" {
+  bucket = aws_s3_bucket.bootstrap_bucket.id
+  key    = "node_exporter.yml"
+  source = "${path.module}/../ansible/node_exporter.yml"
+  etag   = filemd5("${path.module}/../ansible/node_exporter.yml")
+
+  depends_on = [local_file.ansible_private_key]
+}
+
+resource "aws_s3_object" "run_all_yml" {
+  bucket = aws_s3_bucket.bootstrap_bucket.id
+  key    = "run-all.yml"
+  source = "${path.module}/../ansible/run-all.yml"
+  etag   = filemd5("${path.module}/../ansible/run-all.yml")
+
+  depends_on = [local_file.ansible_private_key]
+}
+
 
 

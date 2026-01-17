@@ -67,3 +67,14 @@ resource "aws_security_group" "private" {
   }
 }
 
+
+resource "aws_security_group_rule" "allow_monitoring_to_web_node_exporter" {
+  type                     = "ingress"
+  from_port                = 9100
+  to_port                  = 9100
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.public.id
+  source_security_group_id = aws_security_group.private.id
+  description              = "Allow Prometheus (monitoring) to scrape node_exporter on web instances"
+}
+

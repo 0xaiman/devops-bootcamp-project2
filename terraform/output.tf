@@ -3,8 +3,7 @@ output "ssm_commands" {
   value = {
     web_server = "aws ssm start-session --target ${aws_instance.web.id}"
     controller = "aws ssm start-session --target ${aws_instance.controller.id}"
-
-
+    monitoring = "aws ssm start-session --target ${aws_instance.monitoring.id}"
   }
 }
 
