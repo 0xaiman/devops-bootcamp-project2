@@ -65,3 +65,13 @@
       args:
         chdir: "{{ app_dir }}"
       # Run as root to ensure Docker socket access
+
+    - name: Wait for 10 seconds before running Docker on port 80
+      ansible.builtin.pause:
+        seconds: 10
+
+    - name: Run Docker container on port 80
+      shell: docker run -d -p 80:80 --name port_to_80 lab-final-project-final-project
+      args:
+        chdir: "{{ app_dir }}"
+      ignore_errors: yes
