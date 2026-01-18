@@ -12,7 +12,7 @@ packages:
   - lsb-release
   - python3
   - python3-pip
-  - ansible
+  # ansible will be installed via pip (ansible-core) to ensure collection compatibility
 
 
 runcmd:
@@ -83,6 +83,10 @@ runcmd:
   # Install Ansible Galaxy collections needed by playbooks
   - mkdir -p /home/ssm-user/.ansible/collections/ansible_collections
   - chown -R ssm-user:ssm-user /home/ssm-user/.ansible
+  # Ensure modern Ansible runtime is available for galaxy collections
+  - python3 -m pip install --upgrade pip setuptools wheel > /home/ssm-user/logs/pip-upgrade.log 2>&1 || true
+  - python3 -m pip install --upgrade "ansible-core>=2.14" ansible > /home/ssm-user/logs/ansible-pip-install.log 2>&1 || true
+
   - sudo -u ssm-user ansible-galaxy collection install prometheus.prometheus --force >> /home/ssm-user/logs/ansible-galaxy.log 2>&1 || true
   - chown -R ssm-user:ssm-user /home/ssm-user/.ansible
 

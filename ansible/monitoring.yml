@@ -11,3 +11,13 @@
       - job_name: "webserver"
         static_configs:
           - targets: ["10.0.0.5:9100"]
+
+- name: Install Grafana
+  hosts: monitor
+  become: true
+  roles:
+    - grafana.grafana.grafana
+  vars:
+    grafana_security:
+      admin_user: "admin"
+      admin_password: "admin"
