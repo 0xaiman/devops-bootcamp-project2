@@ -50,7 +50,7 @@ resource "aws_instance" "monitoring" {
   ami                    = "ami-0827b3068f1548bf6"
   instance_type          = "t3.micro"
   subnet_id              = aws_subnet.private.id
-  vpc_security_group_ids = [aws_security_group.private.id]
+  vpc_security_group_ids = [aws_security_group.monitoring.id]
   private_ip             = "10.0.0.136"
   iam_instance_profile   = aws_iam_instance_profile.ssm.name
   key_name               = aws_key_pair.ansible.key_name

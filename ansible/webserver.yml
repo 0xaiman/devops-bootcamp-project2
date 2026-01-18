@@ -2,6 +2,8 @@
 - name: Clone and run lab-final-project on web server
   hosts: web
   become: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
   vars:
     repo_url: https://github.com/0xaiman/fork-lab-final-devops.git

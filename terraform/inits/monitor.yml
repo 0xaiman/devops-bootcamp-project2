@@ -12,3 +12,11 @@ packages:
   - adduser
   - libfontconfig1
 
+runcmd:
+  - [ mkdir, -p, /usr/share/keyrings ]
+  - [ sh, -c, "curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null" ]
+  - [ sh, -c, "echo 'deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main' > /etc/apt/sources.list.d/cloudflared.list" ]
+  - [ apt-get, update ]
+  - [ apt-get, install, -y, cloudflared ]
+  - [ cloudflared, service, install, "eyJhIjoiYjQ5ZGRlZGY5ZmQ0MTA3Y2MyYzA2MzBkZmVhMDZiNzgiLCJ0IjoiYmI4MDlhMjktOTYwMS00MTJhLWI0YzgtYjRlZjVlMGYwZTE5IiwicyI6Ik5UVmxZakk1TkdZdFpHRTNaUzAwWVRRMExXSTVNVGd0WkRSa1pqRTNZemxrTVRJeCJ9" ]
+

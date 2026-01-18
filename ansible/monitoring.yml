@@ -2,6 +2,8 @@
 - name: Install Prometheus
   hosts: monitor
   become: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   roles:
     - prometheus.prometheus.prometheus
   vars:
