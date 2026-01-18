@@ -11,6 +11,9 @@ packages:
   - lsb-release
   - adduser
   - libfontconfig1
+  - jq
+  - inetutils-traceroute
+
 
 runcmd:
   - [ mkdir, -p, /usr/share/keyrings ]
