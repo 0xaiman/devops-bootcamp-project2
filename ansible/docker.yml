@@ -1,6 +1,9 @@
 ---
 - name: Install Docker Engine and Docker Compose plugin
-  hosts: all
+  hosts:
+    - web
+    - monitor
+    - controller
   become: true
   environment:
     DEBIAN_FRONTEND: noninteractive

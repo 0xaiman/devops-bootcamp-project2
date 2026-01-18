@@ -1,6 +1,9 @@
 ---
 - name: Install Node Exporter via Ansible Galaxy role
-  hosts: web
+  hosts:
+    - web
+    - monitor
+    - controller
   become: true
   environment:
     DEBIAN_FRONTEND: noninteractive
